@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<% include partials/head %>
+	</head>
+	<body>
+
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Stifco</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/login">Se connecter</a></li>
+          </ul>
+          <form class="navbar-form navbar-right" style="display:none;">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+</nav>
+
+      
+		
+
+	<div class="container-fluid">
+      
+      <div class="row row-offcanvas row-offcanvas-left">
+        
+         <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
+           
+            <ul class="nav nav-sidebar">
+            	<li class="active"><a href="#">Inscription</a></li>
+              	<li><a href="/index">Accueil</a></li>
+              	<li><a href="#">A propos</a></li>
+            </ul>
+          
+        </div><!--/span-->
+        
+        <div class="col-sm-9 col-md-10 main">
+          
+          <div class="row placeholders  col-lg-4 col-offset-4 centered">
+          	<form action="/registration" method="POST" role="form">
+          		<% if(checkMdp){ %>
+					<script>alert("Mots de passe non identiques.");</script>
+				   <%}
+				%>
+				<% if(checkIdNavigo){ %>
+					<script>alert("L'id navigo est deja présent.");</script>
+				   <%}
+				%>
+          		<div class="form-group">
+          			<label>Votre ID Navigo</label>
+          			<input name="navigo" id="navigo" type="text" value="<%= navigo %>" required class="form-control" />
+          		</div>
+          		<div class="form-group">
+          			<label>Choisir un mot de passe</label>
+          			<input name="password" id="password" type="password" value="<%= mdp %>" required class="form-control" />
+          		</div>
+          		<div class="form-group">
+          			<label>Retaper votre mot de passe</label>
+          			<input name="passwordVerif" id="passwordVerif" type="password" value="<%= mdpVerif %>" required class="form-control" />
+          		</div>
+          		<div class="form-group">
+          			<label>Votre nom</label>
+          			<input name="nom" id="nom" type="text" value="<%= nom %>" required class="form-control" />
+          		</div>
+          		<div class="form-group">
+          			<label>Votre prénom</label>
+          			<input name="prenom" id="prenom" type="text" value="<%= prenom %>" required class="form-control" />
+          		</div>
+          		<div class="form-group">
+          			<label>Votre email</label>
+          			<input name="mail" id="mail" type="email" value="<%= email %>" required class="form-control" />
+          		</div>
+          		<div class="form-group">
+          			<label>Code Postal</label>
+          			<input name="cp" id="cp" type="text" value="<%= cp %>" required class="form-control" />
+          		</div>
+          		<div class="form-group">
+          			<label>Ville</label>
+          			<input name="ville" id="ville" type="text" value="<%= commune %>" required class="form-control" />
+          		</div>
+
+				<input type="submit" value="Valider" class="btn btn-default">
+
+			</form>
+          </div>
+
+
+
+
+          
+
+          
+      </div><!--/row-->
+	</div>
+</div><!--/.container-->
+
+
+	<% include partials/footer %>
+
+	<script type="text/javascript" src="js/jquery.js"></script>
+	</body>
+</html>

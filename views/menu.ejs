@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<% include partials/head %>
+	</head>
+	<body>
+
+		<% include partials/headerBegin %>
+        <% include partials/headerEnd %>
+
+      
+		
+
+	<div class="container-fluid">
+      
+      <div class="row row-offcanvas row-offcanvas-left">
+        
+         <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
+           
+            <ul class="nav nav-sidebar">
+              <li class="active"><a href="#">Accueil</a></li>
+              <li><a href="/proposer_transport">Proposer un transport</a></li>
+				<li><a href="/propositions">Consulter les propositions disponibles</a></li>
+				<!--li><a href="/reservations">Consulter ses réservations</a></li-->
+            </ul>
+          
+        </div><!--/span-->
+        
+        <div class="col-sm-9 col-md-10 main">
+          
+          <div class="row placeholders">
+            <div class="text-center">
+              <% if (nom == 'Chuck' && prenom == 'Norris') { %>
+					<h4>Cette application n'est pas pour Chuck Norris, c'est l'application qui est pour Chuck Norris.</h4>
+				<% } else {%>
+					<h4>Page d'accueil de l'application Stifco</h4>
+				<% } %>
+              <span class="text-muted">...</span>
+            </div>
+          
+          
+
+          
+      </div><!--/row-->
+	</div>
+</div><!--/.container-->
+
+	<% include partials/footer %>
+	</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<% include partials/head %>
+		
+		
+	</head>
+	<body>
+
+		<% include partials/headerBegin %>
+		<% include partials/headerEnd %>
+
+      
+		
+
+	<div class="container-fluid">
+      
+      <div class="row row-offcanvas row-offcanvas-left">
+        
+         <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
+           
+            <ul class="nav nav-sidebar">
+              	<li><a href="/menu">Accueil</a></li>
+              	<li class="active"><a href="/proposer_transport">Proposer un transport</a></li>
+				<li><a href="/propositions">Consulter les propositions disponibles</a></li>
+				<!--li><a href="/reservations">Consulter ses réservations</a></li-->
+            </ul>
+          
+        </div><!--/span-->
+        
+        <div class="col-sm-9 col-md-10 main">
+          
+          <div class="row placeholders  col-lg-4 col-offset-4 centered">
+          	<form action="/nouvelle_offre" method="POST" role="form" id="form">
+          		<div class="form-group">
+          			<label>Numero de la semaine</label>
+          			<input name="numSemaine" id="numSemaine" required class="form-control"/>
+          		</div>
+          		<div class="form-group">
+          			<label>Heure de départ</label>
+          			<input name="hDepart" id="hDepart" type="text" required class="form-control"/>
+          		</div>
+          		<div class="form-group">
+          			<label>Heure de Retour</label>
+          			<input name="hRetour" id="hRetour" type="text" required class="form-control"/>
+          		</div>
+          		<div class="form-group">
+          			<label>Nombre de passager</label>
+          			<input name="nbPassagers" id="nbPassagers" required class="form-control"/>
+          		</div>
+          		<div class="form-group">
+          			<label>Choisir une gare de dépot</label>
+          			<input name="gare" id="gare" type="text" style="text-transform: uppercase;" class="form-control">
+          		</div>
+          		<div class="form-group">
+          			<label>Commune de départ</label>
+          			<input name="commune" id="commune" type="text" required class="form-control" style="text-transform: uppercase;"/>
+          		</div>
+
+				<input id="btn" type="submit" value="Valider" class="btn btn-default">
+
+			</form>
+          </div>
+
+
+
+
+          
+
+          
+      </div><!--/row-->
+	</div>
+</div><!--/.container-->
+
+
+	<% include partials/footer %>
+
+
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/my.js"></script>
+	<script type="text/javascript" src="js/typeahead.js"></script>
+
+	<script type="text/javascript">
+
+		var substringMatcher = function(strs) {
+			return function findMatches(q, cb) {
+				var matches, substrRegex;
+				 
+				// an array that will be populated with substring matches
+				matches = [];
+				 
+				// regex used to determine if a string contains the substring `q`
+				substrRegex = new RegExp(q, 'i');
+				 
+				// iterate through the pool of strings and for any string that
+				// contains the substring `q`, add it to the `matches` array
+				$.each(strs, function(i, str) {
+					if (substrRegex.test(str)) {
+					// the typeahead jQuery plugin expects suggestions to a
+					// JavaScript object, refer to typeahead docs for more info
+					matches.push({ value: str });
+					}
+				});
+				 
+				cb(matches);
+			};
+		};
+			 
+		var tabGare = [
+					<% if(gares.length){
+						for(var i = 0; i < gares.length-1; i++) { %>
+							'<%= gares[i].libelle %>',
+						<% } %>
+						'<%= gares[gares.length-1].libelle %>'
+					<%}%>
+		];
+
+		var tabNomVille = [
+					<% if(villes.length){
+						for(var i = 0; i < villes.length-1; i++) { %>
+							'<%= villes[i].nom %>',
+						<% } %>
+						'<%= villes[villes.length-1].nom %>'
+					<%}%>
+		];
+		 
+		$('#gare').typeahead({
+			hint: false,
+			highlight: true,
+			minLength: 1
+		},
+		{
+			name: 'gare',
+			displayKey: 'value',
+			source: substringMatcher(tabGare)
+		}); 
+
+		$('#commune').typeahead({
+			hint: false,
+			highlight: true,
+			minLength: 1
+		},
+		{
+			name: 'nomVille',
+			displayKey: 'value',
+			source: substringMatcher(tabNomVille)
+		}); 
+
+
+
+		</script>
+	</body>
+</html>

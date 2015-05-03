@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<% include partials/head %>
+	</head>
+	<body>
+
+		<% include partials/headerBegin %>
+        <% include partials/headerEnd %>
+
+      
+		
+
+	<div class="container-fluid">
+      
+      <div class="row row-offcanvas row-offcanvas-left">
+        
+         <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
+           
+            <ul class="nav nav-sidebar">
+              	<li><a href="/menu">Accueil</a></li>
+              	<li><a href="/proposer_transport">Proposer un transport</a></li>
+				<li class="active"><a href="/propositions">Consulter les propositions disponibles</a></li>
+				<!--li><a href="/reservations">Consulter ses réservations</a></li-->
+            </ul>
+          
+        </div><!--/span-->
+        
+        <div class="col-sm-9 col-md-10 main">
+          
+          <h2 class="sub-header">Section title</h2>
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+            	<thead>
+              		<tr>
+						<th>ID Offreur</th>
+						<th>De la part de</th>
+						<th>Semaine</th>
+						<th>Nbr. passager</th>
+						<th>Heure de départ</th>
+						<th>Heure de retour</th>
+						<th>Ville de départ</th>
+						<th>Gare de dépôt</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% if(offres.length){
+						for(var i = 0;i < offres.length;i++) { %>
+							<tr>
+								<td><%= offres[i].FK_offreur %></td>
+								<td><%= identite[i] %></td>
+								<td><%= offres[i].numSemaine %></td>
+								<td><%= offres[i].nbPassagers %></td>
+								<td><%= offres[i].hDepart %></td>
+								<td><%= offres[i].hRetour %></td>
+								<td><%= offres[i].villeDepart %></td>
+								<td><%= offres[i].gareArrivee %></td>
+								<td><a href="/reserver_transport_check?idOffre=<%= offres[i].id %>">Réserver</a></td>
+							</tr>
+						<% }
+					}else{ %>
+						<tr>
+						<td colspan="3">Aucune informations disponibles</td>
+						</tr>
+					<% } %>
+				</tbody>
+            </table>
+          </div>       
+          
+      </div><!--/row-->
+	</div>
+</div><!--/.container-->
+
+	<% include partials/footer %>
+	</body>
+</html>

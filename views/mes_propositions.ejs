@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<% include partials/head %>
+	</head>
+	<body>
+
+		<% include partials/headerBegin %>
+        <% include partials/headerEnd %>
+
+      
+		
+
+	<div class="container-fluid">
+      
+      <div class="row row-offcanvas row-offcanvas-left">
+        
+         <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
+           
+            <ul class="nav nav-sidebar">
+              <li class="active"><a href="#">Mes propositions</a></li>
+              <li><a href="/proposer_transport">Proposer un transport</a></li>
+				<li><a href="/propositions">Consulter les propositions disponibles</a></li>
+				<!--li><a href="/reservations">Consulter ses réservations</a></li-->
+            </ul>
+          
+        </div><!--/span-->
+        
+        <div class="col-sm-9 col-md-10 main">
+
+          <div class="table-responsive"> 
+            <table class="table table-striped table-hover">
+            	<thead>
+              		<tr>
+              			<th>ID Offre</th>
+						<th>Semaine</th>
+						<th>Nbr. passager</th>
+						<th>Heure de départ</th>
+						<th>Heure de retour</th>
+						<th>Ville de départ</th>
+						<th>Gare de dépôt</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% if(offres.length){
+						for(var i = 0;i < offres.length;i++) { %>
+							<tr>
+								<td><%= offres[i].id %></td>
+								<td><%= offres[i].numSemaine %></td>
+								<td><%= offres[i].nbPassagers %></td>
+								<td><%= offres[i].hDepart %></td>
+								<td><%= offres[i].hRetour %></td>
+								<td><%= offres[i].villeDepart %></td>
+								<td><%= offres[i].gareArrivee %></td>
+								<td>
+									<a href="/mes_propositions_check?action=0&idOffre=<%= offres[i].id %>&nbPassagers=<%= offres[i].nbPassagers %>&hDepart=<%= offres[i].hDepart %>&hRetour=<%= offres[i].hRetour %>&villeDepart=<%= offres[i].villeDepart %>&gareArrivee=<%= offres[i].gareArrivee %>">E</a> &nbsp; 
+									<a href="/mes_propositions_check?action=1&idOffre=<%= offres[i].id %>">X</a>
+								</td>
+							</tr>
+						<% }
+					}else{ %>
+						<tr>
+						<td colspan="3">Aucune informations disponibles</td>
+						</tr>
+					<% } %>
+				</tbody>
+            </table>
+          </div>
+         </div>
+          
+          
+
+          
+      </div><!--/row-->
+	</div>
+</div><!--/.container-->
+
+	<% include partials/footer %>
+	</body>
+</html>
+

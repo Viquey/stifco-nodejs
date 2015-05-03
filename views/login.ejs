@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<% include partials/head %>
+	</head>
+	<body>
+
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Stifco</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+          	</ul>
+          <form class="navbar-form navbar-right" style="display:none;">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+</nav>
+
+      
+		
+
+	<div class="container-fluid">
+      
+      <div class="row row-offcanvas row-offcanvas-left">
+        
+         <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
+           
+            <ul class="nav nav-sidebar">
+              <li class="active"><a href="#">Connexion</a></li>
+              <li><a href="/index">Accueil</a></li>
+              <li><a href="#">A propos</a></li>
+            </ul>
+          
+        </div><!--/span-->
+        
+        <div class="col-sm-9 col-md-10 main">
+          
+          <!--toggle sidebar button-->
+          <p class="visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas"><i class="glyphicon glyphicon-chevron-left"></i></button>
+          </p>
+          
+          <div class="row placeholders  col-lg-4 col-offset-4 centered">
+            <form action="/check_login" method="POST" role="form">
+			<% if(mdpIncorrect){ %>
+				<script>alert("Le mot de passe et l'identifiant ne correspondent pas.");</script>
+			   <%}
+			%>
+			<div class="form-group">
+				<label>ID Navigo</label>
+				<input name="identifiant" id="identifiant" class="form-control" required/><br/>
+			</div>
+			<div class="form-group">
+				<label>Mot de passe</label>
+				<input name="password" id="password" type="password" required class="form-control"/><br/>
+				<input type="submit" value="Valider" class="btn btn-default"/>
+			</div>
+		</form>
+          </div>
+
+          <div class="col-sm-9 col-md-10 pull-right"><a href="/register">Inscription</a></div>
+          
+          
+
+          
+      </div><!--/row-->
+	</div>
+</div><!--/.container-->
+
+	<% include partials/footer %>
+	</body>
+</html>
+
+
