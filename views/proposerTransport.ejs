@@ -3,7 +3,11 @@
 	<head>
 		<% include partials/head %>
 		
-		
+		<% if(message) { %>
+			<script type="text/javascript">
+				alert('La commune de départ possède une gare, veuillez changer de commune de départ');
+			</script>
+		<% } %>
 	</head>
 	<body>
 

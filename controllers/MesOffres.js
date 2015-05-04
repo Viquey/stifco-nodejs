@@ -17,6 +17,9 @@ exports.mesOffres = function(req, res, next) {
 	secureLogin(req, res);
 	var id = req.session.id;
 
+	var passedMessage = req.query.message;
+	var message = decodeURIComponent(passedMessage);
+
 	req.getConnection(function(err, connection) {
       if (err) return next(err);
 		var requete = "SELECT * FROM `offre` WHERE FK_offreur = ?";
@@ -27,7 +30,13 @@ exports.mesOffres = function(req, res, next) {
 					throw err;
 				}
 				else {
-					res.render('mes_propositions.ejs',{'offres':rows,"prenom":req.session.prenom,"nom":req.session.nom});
+					if(message == '1') {
+						res.render('mes_propositions.ejs',{'offres':rows,"prenom":req.session.prenom,"nom":req.session.nom,'message':true});
+					}
+					else {
+						res.render('mes_propositions.ejs',{'offres':rows,"prenom":req.session.prenom,"nom":req.session.nom,'message':false});
+					}
+					
 				}
 		});
 	});
@@ -86,8 +95,6 @@ exports.actionSurMonOffre = function(req, res, next) {
 
 		  		}
 	  		});
-			
-
 		};
 	});
 };

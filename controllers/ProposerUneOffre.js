@@ -13,6 +13,10 @@ function secureLogin(req, res){
 exports.proposerTransport = function(req, res, next) {
 	secureLogin(req, res);
 
+	// si message = '1' alors la ville de départ possède une gare
+	var passedMessage = req.query.message;
+	var message = decodeURIComponent(passedMessage);
+
 	req.getConnection(function(err, connection) {
       if (err) return next(err);
 
@@ -30,7 +34,12 @@ exports.proposerTransport = function(req, res, next) {
 						throw err;
 	  				}
 	  				else {
-						res.render('proposerTransport.ejs',{"prenom":req.session.prenom,"nom":req.session.nom,'gares':rowsGare,'villes':rowsNomVille});
+	  					if(message == '1') {
+							res.render('proposerTransport.ejs',{"prenom":req.session.prenom,"nom":req.session.nom,'gares':rowsGare,'villes':rowsNomVille,'message':true});
+	  					}
+	  					else {
+	  						res.render('proposerTransport.ejs',{"prenom":req.session.prenom,"nom":req.session.nom,'gares':rowsGare,'villes':rowsNomVille,'message':false});
+						}
 					}
 				});
 	  		}	
@@ -79,86 +88,104 @@ exports.nouvelleOffre = function(req, res, next) {
 
 		  				//La ville existe déja --donc aucune insertion-- insertion de la nouvelle gare dans la bdd puis redirection
 						else if (rowsVille.length == 1){
-							// Ajout d'une offre via le form 
-							if (!req.param('edit')) {
-								var numSemaine = req.body.numSemaine;
-								
-								var requestOffre = "INSERT INTO offre (FK_offreur, numSemaine, nbPassagers, hDepart, hRetour, villeDepart, gareArrivee) VALUES (?,?,?,?,?,?,?)";
-							
-								var addOffreQuery = connection.query(requestOffre,[idOffreur,numSemaine,nbPassagers,hDepart,hRetour,villeDepart,gareArrivee],function(err, rows){
-									if(err)	{
-										throw err;
-						  		}
-									else {
-										res.redirect('/menu');
+							var verifVilleIsSansGareReq = 'SELECT * FROM `gare` WHERE libelle = ?';
+							var verifVilleIsSansGareQuery = connection.query(verifVilleIsSansGareReq,[villeDepart], function(err, rows){
+								if (rows.length == 0) {
+								// Ajout d'une offre via le form 
+									if (!req.param('edit')) {
+										var numSemaine = req.body.numSemaine;
+										
+										var requestOffre = "INSERT INTO offre (FK_offreur, numSemaine, nbPassagers, hDepart, hRetour, villeDepart, gareArrivee) VALUES (?,?,?,?,?,?,?)";
+									
+										var addOffreQuery = connection.query(requestOffre,[idOffreur,numSemaine,nbPassagers,hDepart,hRetour,villeDepart,gareArrivee],function(err, rows){
+											if(err)	{
+												throw err;
+								  		}
+											else {
+												res.redirect('/menu');
+											}
+										});
+
 									}
-								});
 
-							}
-
-							// Mise à jour d'une offre depuis les données envoyées par la vue editMaProposition.ejs 
-							else {
-								var requestEditOffre = "UPDATE offre SET nbPassagers = ?, hDepart = ?, hRetour = ?, villeDepart = ?, gareArrivee = ? WHERE id = ?";
-
-								var editOffreQuery = connection.query(requestEditOffre,[nbPassagers, hDepart, hRetour, villeDepart, gareArrivee, idOffre], function(err, rows){
-									if(err)	{
-										throw err;
-						  		}
+									// Mise à jour d'une offre depuis les données envoyées par la vue editMaProposition.ejs 
 									else {
-										res.redirect('/mes_propositions');
-									}
-								});
-								
-							};
+										var requestEditOffre = "UPDATE offre SET nbPassagers = ?, hDepart = ?, hRetour = ?, villeDepart = ?, gareArrivee = ? WHERE id = ?";
+
+										var editOffreQuery = connection.query(requestEditOffre,[nbPassagers, hDepart, hRetour, villeDepart, gareArrivee, idOffre], function(err, rows){
+											if(err)	{
+												throw err;
+								  		}
+											else {
+												res.redirect('/mes_propositions');
+											}
+										});
+										
+									};
+								}
+								else {
+									var setMessage = encodeURIComponent('1');
+									res.redirect('/mes_propositions_check?message='+setMessage);
+								}
+							});
 
 						}
 
 						// insertion dans la bdd table ville_sans_gare car n'existe pas
 						else if (rowsVille.length == 0){
 
-							var insertNomVilleReq = 'INSERT INTO ville_sans_gare (nom) VALUES (?)';
-							var insertNomVilleQuery = connection.query(insertNomVilleReq,[villeDepart], function(err, rows){
-									if(err)	{
-										throw err;
-						  			}
-									else {
-										if (!req.param('edit')) {
-											var numSemaine = req.body.numSemaine;
-											
-											var requestOffre = "INSERT INTO offre (FK_offreur, numSemaine, nbPassagers, hDepart, hRetour, villeDepart, gareArrivee) VALUES (?,?,?,?,?,?,?)";
-										
-											var addOffreQuery = connection.query(requestOffre,[idOffreur,numSemaine,nbPassagers,hDepart,hRetour,villeDepart,gareArrivee],function(err, rows){
-												if(err)	{
-													throw err;
-										  		}
-												else {
-													res.redirect('/menu');
-												}
-											});
-
-										}
-										// Mise à jour d'une offre depuis les données envoyées par la vue editMaProposition.ejs 
+							var verifVilleIsSansGareReq = 'SELECT * FROM `gare` WHERE libelle = ?';
+							var verifVilleIsSansGareQuery = connection.query(verifVilleIsSansGareReq,[villeDepart], function(err, rows){
+								if (rows.length == 0) {
+									var insertNomVilleReq = 'INSERT INTO ville_sans_gare (nom) VALUES (?)';
+									var insertNomVilleQuery = connection.query(insertNomVilleReq,[villeDepart], function(err, rows){
+										if(err)	{
+											throw err;
+							  			}
 										else {
-											var requestEditOffre = "UPDATE offre SET nbPassagers = ?, hDepart = ?, hRetour = ?, villeDepart = ?, gareArrivee = ? WHERE id = ?";
-
-											var editOffreQuery = connection.query(requestEditOffre,[nbPassagers, hDepart, hRetour, villeDepart, gareArrivee, idOffre], function(err, rows){
-												if(err)	{
-													throw err;
-									  		}
-												else {
-													res.redirect('/mes_propositions');
-												}
-											});
+											if (!req.param('edit')) {
+												var numSemaine = req.body.numSemaine;
+												
+												var requestOffre = "INSERT INTO offre (FK_offreur, numSemaine, nbPassagers, hDepart, hRetour, villeDepart, gareArrivee) VALUES (?,?,?,?,?,?,?)";
 											
-										};
-									}
+												var addOffreQuery = connection.query(requestOffre,[idOffreur,numSemaine,nbPassagers,hDepart,hRetour,villeDepart,gareArrivee],function(err, rows){
+													if(err)	{
+														throw err;
+											  		}
+													else {
+														res.redirect('/menu');
+													}
+												});
+
+											}
+											// Mise à jour d'une offre depuis les données envoyées par la vue editMaProposition.ejs 
+											else {
+												var requestEditOffre = "UPDATE offre SET nbPassagers = ?, hDepart = ?, hRetour = ?, villeDepart = ?, gareArrivee = ? WHERE id = ?";
+
+												var editOffreQuery = connection.query(requestEditOffre,[nbPassagers, hDepart, hRetour, villeDepart, gareArrivee, idOffre], function(err, rows){
+													if(err)	{
+														throw err;
+										  		}
+													else {
+														res.redirect('/mes_propositions');
+													}
+												});
+												
+											};
+										}
+									});
+								}
+								else {
+									var setMessage = encodeURIComponent('1');
+									res.redirect('/mes_propositions?message='+setMessage);
+								}
 							});
 						}
 					});
 	  			}
 	  			/* Le nom de la gare ne correspond pas a ceux présentent dans la bdd */
 	  			else {
-	  				res.redirect('/proposer_transport')
+	  				res.redirect('/proposer_transport');
 			
 	  			}
 				
